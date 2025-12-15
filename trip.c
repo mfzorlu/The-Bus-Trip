@@ -4,6 +4,7 @@
 #include <stdlib.h>  // Memory
 #include <string.h>  // String Operations
 #include <time.h>  // Date/Time
+#include <unistd.h>  // CLI Input Bug
 
 // Maximum limits
 #define MAX_TRIPS 100
@@ -84,8 +85,15 @@ int main() {
     while (1) {
         displayMenu();
         printf("Enter your choice: ");
-        scanf("%d", &choice);
-        clearInputBuffer();
+        char buf[16];
+
+        if (!fgets(buf, sizeof(buf), stdin)) {
+            printf("Input error. Exiting.\n");
+            break;
+        }
+
+        choice = atoi(buf);
+
         
         switch(choice) {
             case 1: createTrip(); break;
